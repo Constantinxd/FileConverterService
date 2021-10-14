@@ -1,7 +1,6 @@
 package ru.vyatsu.koscheev.fileConverterService;
 
 import com.google.gson.reflect.TypeToken;
-import ru.vyatsu.koscheev.fileConverterService.XmlToJson.*;
 import com.google.gson.Gson;
 
 import java.io.FileReader;
@@ -30,10 +29,10 @@ public class JsonToXml {
         writer.writeCharacters("\n" + "\t".repeat(recursion));
     }
 
-    public static void convert(BrandsWrapper brandsWrapper) {
+    private static void writeXml(BrandsWrapper brandsWrapper, String outputFile) {
         try {
             XMLOutputFactory output = XMLOutputFactory.newInstance();
-            XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter("result.xml"));
+            XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter(outputFile));
             int count = 0;
 
             writer.writeStartDocument("UTF-8","1.0");
@@ -98,7 +97,11 @@ public class JsonToXml {
         }
     }
 
+    public static void convert(String inputFile, String outputFile) throws Exception {
+        writeXml(readJson(inputFile), outputFile);
+    }
+
     public static void main(String[] args) throws Exception {
-        convert(readJson("inputFiles\\user.json"));
+       JsonToXml.convert(args[0], args[1]);
     }
 }

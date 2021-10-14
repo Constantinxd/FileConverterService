@@ -54,7 +54,7 @@ public class XmlToJson {
                                 car.year = Integer.parseInt(xml.getText());
                         }
                         else if (xml.isStartElement() && xml.getLocalName().equals("engine")) {
-                            Engine engine = new Engine();
+                            BrandCar.Engine engine = car.new Engine();
 
                             while (xml.hasNext() && !(xml.isEndElement() && xml.getLocalName().equals("engine"))) {
                                 xml.next();
@@ -93,31 +93,31 @@ public class XmlToJson {
         return cars;
     }
 
-    private static List<Brand> getBrandList(List<BrandCar> brandCars) {
-        List<Brand> brands = new ArrayList<>();
+    private static List<BrandAutopark> getBrandList(List<BrandCar> brandCars) {
+        List<BrandAutopark> brands = new ArrayList<>();
         List<String> brandNames = new ArrayList<>();
 
         for (BrandCar bc : brandCars) {
             if (!brandNames.contains(bc.brand)) {
                 brandNames.add(bc.brand);
 
-                brands.add(new Brand(bc.brand, new ArrayList<>()));
+                brands.add(new BrandAutopark(bc.brand, new ArrayList<>()));
             }
         }
 
         for (BrandCar bc : brandCars)
-            for (Brand b : brands)
+            for (BrandAutopark b : brands)
                 if (b.name.equals(bc.brand))
                     b.cars.add(new Car(bc.model, bc.year, bc.engine));
 
         return brands;
     }
 
-    private static void writeJson(List<Brand> brands, String outputFile) {
+    private static void writeJson(List<BrandAutopark> brands, String outputFile) {
         try {
             List<BrandWrapper> brandWrapperList = new ArrayList<>();
 
-            for (Brand b : brands)
+            for (BrandAutopark b : brands)
                 brandWrapperList.add(new BrandWrapper(b));
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -135,86 +135,10 @@ public class XmlToJson {
     public static void convert(String inputFile, String outputFile) {
         try {
             List<BrandCar> cars = readXml(inputFile);
-            List<Brand> brands = getBrandList(cars);
+            List<BrandAutopark> brands = getBrandList(cars);
             writeJson(brands, outputFile);
-
-            /*
-            for (BrandCar c : cars) {
-            System.out.println(c.brand);
-            System.out.println(c.model);
-            System.out.println(c.year);
-            System.out.println("\t" + c.engine.amount);
-            System.out.println("\t" + c.engine.power);
-            System.out.println("\t" + c.engine.fuel);
-            System.out.println();
-            }
-
-            for (Brand b : brands) {
-            System.out.println(b.name);
-            for (Car c : b.cars) {
-                System.out.println("\t" + c.model);
-                System.out.println("\t" + c.year);
-                System.out.println("\t\t" + c.engine.amount);
-                System.out.println("\t\t" + c.engine.power);
-                System.out.println("\t\t" + c.engine.fuel);
-                }
-            }
-            */
-
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    static class Car {
-        String model;
-        int year;
-        Engine engine;
-
-        public Car(String model, int year, Engine engine) {
-            this.model = model;
-            this.year = year;
-            this.engine = engine;
-        }
-    }
-
-    static class BrandCar extends Car {
-        String brand;
-
-        public BrandCar(String model, int year, Engine engine) {
-            super(model, year, engine);
-        }
-    }
-
-    static class Engine{
-        double amount;
-        int power;
-        String fuel;
-    }
-
-    static class Brand {
-        String name;
-        List<Car> cars;
-
-        public Brand (String name, List<Car> cars){
-            this.name = name;
-            this.cars = cars;
-        }
-    }
-
-    static class BrandWrapper {
-        Brand brand;
-
-        public BrandWrapper(Brand brand) {
-            this.brand = brand;
-        }
-    }
-
-    static class BrandsWrapper {
-        List<BrandWrapper> brands;
-
-        public BrandsWrapper(List<BrandWrapper> brands) {
-            this.brands = brands;
         }
     }
 
