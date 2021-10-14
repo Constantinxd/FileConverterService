@@ -35,7 +35,7 @@ public class JsonToXml {
             XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter(outputFile));
             int count = 0;
 
-            writer.writeStartDocument("UTF-8","1.0");
+            writer.writeStartDocument("utf-8","1.0");
             println(writer, 0);
             writer.writeStartElement("cars");
 
@@ -97,11 +97,15 @@ public class JsonToXml {
         }
     }
 
-    public static void convert(String inputFile, String outputFile) throws Exception {
-        writeXml(readJson(inputFile), outputFile);
+    public static void convert(String inputFile, String outputFile) {
+        try {
+            writeXml(readJson(inputFile), outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
        JsonToXml.convert(args[0], args[1]);
     }
 }
