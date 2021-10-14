@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <cars>
 	<car id="0">
 		<brand>Volkswagen</brand>
@@ -7,7 +7,7 @@
 		<engine>
 			<amount>1.4</amount>
 			<power>150</power>
-			<fuel>Бензин</fuel>
+			<fuel>Р‘РµРЅР·РёРЅ</fuel>
 		</engine>
 	</car>
 	<car id="1">
@@ -17,7 +17,7 @@
 		<engine>
 			<amount>2.0</amount>
 			<power>180</power>
-			<fuel>Бензин</fuel>
+			<fuel>Р‘РµРЅР·РёРЅ</fuel>
 		</engine>
 	</car>
 	<car id="2">
@@ -27,7 +27,7 @@
 		<engine>
 			<amount>5.7</amount>
 			<power>367</power>
-			<fuel>Бензин</fuel>
+			<fuel>Р‘РµРЅР·РёРЅ</fuel>
 		</engine>
 	</car>
 	<car id="3">
@@ -37,7 +37,7 @@
 		<engine>
 			<amount>1.6</amount>
 			<power>87</power>
-			<fuel>Бензин</fuel>
+			<fuel>Р‘РµРЅР·РёРЅ</fuel>
 		</engine>
 	</car>
 </cars>

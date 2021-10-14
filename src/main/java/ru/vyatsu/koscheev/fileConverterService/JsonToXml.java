@@ -3,18 +3,20 @@ package ru.vyatsu.koscheev.fileConverterService;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 public class JsonToXml {
+
     private static BrandsWrapper readJson(String fileName) throws Exception {
-        try (FileReader reader = new FileReader(fileName)) {
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(fileName), StandardCharsets.UTF_8)) {
             Gson gson = new Gson();
             Type type = new TypeToken<BrandsWrapper>(){}.getType();
 
@@ -32,10 +34,10 @@ public class JsonToXml {
     private static void writeXml(BrandsWrapper brandsWrapper, String outputFile) {
         try {
             XMLOutputFactory output = XMLOutputFactory.newInstance();
-            XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter(outputFile));
+            XMLStreamWriter writer = output.createXMLStreamWriter(new FileOutputStream(outputFile), String.valueOf(StandardCharsets.UTF_8));
             int count = 0;
 
-            writer.writeStartDocument("utf-8","1.0");
+            writer.writeStartDocument(String.valueOf(StandardCharsets.UTF_8),"1.0");
             println(writer, 0);
             writer.writeStartElement("cars");
 
@@ -76,6 +78,7 @@ public class JsonToXml {
 
                     writer.writeStartElement("fuel");
                     writer.writeCharacters("" + c.engine.fuel);
+                    System.out.println(c.engine.fuel);
                     writer.writeEndElement();
                     println(writer, 2);
 
