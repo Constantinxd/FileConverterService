@@ -31,7 +31,7 @@ public class XmlToJson {
         HashMap<String, Autopark> autoparksMap = new HashMap<>();
 
         for (Car car : carWrapper.cars) {
-            String brand = (car.brand == null) ? "undefined" : car.brand;
+            String brand = (car.brand == null || car.brand.equals("")) ? "undefined" : car.brand;
             Car newCar = new Car(car.model, car.year, car.engine);
 
             if (autoparksMap.containsKey(car.brand)) {
