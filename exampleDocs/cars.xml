@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cars>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan I</model>
+        <year>2008</year>
+        <engine>
+            <amount>1.4</amount>
+            <power>150</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan II</model>
+        <year>2017</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>180</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan III</model>
+        <year>2021</year>
+        <engine>
+            <amount>3.0</amount>
+            <power>249</power>
+            <fuel>Дизель</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Lexus</brand>
+        <model>LX 570 III</model>
+        <year>2018</year>
+        <engine>
+            <amount>5.7</amount>
+            <power>367</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>LADA</brand>
+        <model>Granta I</model>
+        <year>2012</year>
+        <engine>
+            <amount>1.6</amount>
+            <power>87</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>LADA</brand>
+        <model>XRAY Cross I</model>
+        <year>2019</year>
+        <engine>
+            <amount>1.8</amount>
+            <power>122</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>LADA</brand>
+        <model>2107</model>
+        <year>2010</year>
+        <engine>
+            <amount>1.6</amount>
+            <power>73</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Kia</brand>
+        <model>Kia Ceed I</model>
+        <year>2008</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>140</power>
+            <fuel>Дизель</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Kia</brand>
+        <model>Kia K5 III</model>
+        <year>2021</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>150</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Kia</brand>
+        <model>Kia Cerato IV</model>
+        <year>2018</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>150</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Audi</brand>
+        <model>TT III (8S)</model>
+        <year>2018</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>230</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+</cars>
