@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cars>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan I</model>
+        <year>2008</year>
+        <engine>
+            <amount>1.4</amount>
+            <power>150</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan II</model>
+        <year>2017</year>
+        <engine>
+            <amount>2.0</amount>
+            <power>180</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+    <car>
+        <brand>LADA</brand>
+        <model>Granta I</model>
+        <year>2012</year>
+        <engine>
+            <amount>1.6</amount>
+            <power>87</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+</cars>

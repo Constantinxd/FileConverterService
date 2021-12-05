@@ -1,0 +1,16 @@
+{
+  "brands" : [ {
+    "brand" : {
+      "name" : "Volkswagen",
+      "cars" : [ {
+        "model" : "Tiguan I",
+        "year" : 2008,
+        "engine" : {
+          "amount" : 0.0,
+          "power" : 0,
+          "fuel" : "undefined"
+        }
+      } ]
+    }
+  } ]
+}

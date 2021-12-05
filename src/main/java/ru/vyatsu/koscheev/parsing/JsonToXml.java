@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,61 +17,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonToXml {
-    private AutoparkWrapper readJson(File inputFile) throws IOException {
+    private AutoparkWrapper readJson(final File inputFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         AutoparkWrapper autoparkWrapper = mapper.readValue(inputFile, AutoparkWrapper.class);
 
         return autoparkWrapper;
     }
 
-    private CarWrapper transform(AutoparkWrapper autoparkWrapper) {
+    private CarWrapper transform(final AutoparkWrapper autoparkWrapper) {
         List<Car> cars = new ArrayList<>();
 
-        for (Autopark autopark : autoparkWrapper.autoparks)
-            for (Car car : autopark.cars)
-                cars.add(new Car(autopark.name, car.model, car.year, car.engine));
+        for (Autopark autopark : autoparkWrapper.autoparks) {
+            if (autopark.cars != null) {
+                for (Car car : autopark.cars)
+                    cars.add(new Car(autopark.name, car.model, car.year, car.engine));
+            }
+        }
 
         return new CarWrapper(cars);
     }
 
-    private void writeXml(CarWrapper brands, File outputFile) throws JAXBException {
+    private void writeXml(final CarWrapper brands, final File outputFile) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(CarWrapper.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(brands, outputFile);
     }
 
-    private void checkInputFile(File inputFile) throws Exception {
+    private void checkInputFile(final File inputFile) throws IllegalArgumentException  {
         if (!inputFile.isFile())
-            throw new Exception("Input file is not file");
+            throw new IllegalArgumentException("Input file is not file");
 
         FileFilter filter = new FileNameExtensionFilter("Document file", "json");
         if (!filter.accept(inputFile))
-            throw new Exception("Wrong input file extension");
+            throw new IllegalArgumentException("Wrong input file extension");
 
         if (!Files.isReadable(Paths.get(inputFile.getPath())))
-            throw new Exception("Can`t read input file");
+            throw new IllegalArgumentException("Can`t read input file");
     }
 
-    private void checkOutputFile(File outputFile) throws Exception {
+    private void checkOutputFile(final File outputFile) throws IOException, IllegalArgumentException {
         if (!outputFile.exists() && canCreateFile(outputFile))
             outputFile.createNewFile();
 
         if (!outputFile.isFile())
-            throw new Exception("Output file is not file");
+            throw new IllegalArgumentException("Output file is not file");
 
         FileFilter filter = new FileNameExtensionFilter("Document file", "xml");
         if (!filter.accept(outputFile))
-            throw new Exception("Wrong output file extension");
+            throw new IllegalArgumentException("Wrong output file extension");
 
         if (outputFile.isHidden())
-            throw new Exception("Output file is hidden");
+            throw new IllegalArgumentException("Output file is hidden");
 
         if (!Files.isWritable(Paths.get(outputFile.getPath())))
-            throw new Exception("Can`t write output file");
+            throw new IllegalArgumentException("Can`t write output file");
     }
 
-    private boolean canCreateFile(File file) throws IOException {
+    private boolean canCreateFile(final File file) throws IOException {
         try {
             return file.createNewFile();
         }
@@ -83,7 +87,7 @@ public class JsonToXml {
         }
     }
 
-    public void convert(String inputFilePath, String outputFilePath) {
+    public void convert(final String inputFilePath, final String outputFilePath) {
         try {
             File inputFile = new File(inputFilePath);
             checkInputFile(inputFile);
@@ -96,8 +100,7 @@ public class JsonToXml {
             writeXml(carWrapper, outputFile);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             System.out.println("File converter service is finished");
         }
     }

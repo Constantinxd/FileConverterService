@@ -1,18 +1,17 @@
 package ru.vyatsu.koscheev.parsing;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestXmlToJson {
-    @TempDir
-    static Path tempDir;
     private static XmlToJson xmlToJson;
 
     @BeforeAll
@@ -21,248 +20,107 @@ public class TestXmlToJson {
     }
 
     @Test
-    public void CorrectXmlConvertToJson1() throws Exception {
-        Path fileXml = Files.createFile(tempDir.resolve("cars1.xml"));
-        Path fileJson = Files.createFile(tempDir.resolve("cars1.json"));
+    public void xmlConvertToJson1(@TempDir Path tempDir) throws IOException {
+        final String xmlFilePath = "xml/xmlWith1Object.xml";
+        final String jsonFilePath = "json/jsonWith1Object.json";
 
-        Files.write(fileXml, Collections.singletonList("""
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <cars>
-                    <car>
-                        <brand>Volkswagen</brand>
-                        <model>Tiguan I</model>
-                        <year>2008</year>
-                        <engine>
-                            <amount>1.4</amount>
-                            <power>150</power>
-                            <fuel>Бензин</fuel>
-                        </engine>
-                    </car>
-                </cars>"""));
+        try (InputStream inputStreamXml = getClass().getClassLoader().getResourceAsStream(xmlFilePath);
+             InputStream inputStreamJson = getClass().getClassLoader().getResourceAsStream(jsonFilePath)) {
 
-        xmlToJson.convert(fileXml.toString(), fileJson.toString());
+            Path inputFilePath = Files.createFile(tempDir.resolve("inputFile.xml"));
+            Path expectedFilePath = Files.createFile(tempDir.resolve("expectedFile.json"));
+            Path actualFilePath = Files.createFile(tempDir.resolve("actualFile.json"));
 
-        assertEquals(
-                """
-                        {\r
-                          "brands" : [ {\r
-                            "brand" : {\r
-                              "name" : "Volkswagen",\r
-                              "cars" : [ {\r
-                                "model" : "Tiguan I",\r
-                                "year" : 2008,\r
-                                "engine" : {\r
-                                  "amount" : 1.4,\r
-                                  "power" : 150,\r
-                                  "fuel" : "Бензин"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          } ]\r
-                        }""",
-                Files.readString(fileJson).trim());
+            FileUtils.copyInputStreamToFile(inputStreamXml, inputFilePath.toFile());
+            FileUtils.copyInputStreamToFile(inputStreamJson, expectedFilePath.toFile());
+
+            xmlToJson.convert(inputFilePath.toString(), actualFilePath.toString());
+
+            assertEquals(Files.readString(expectedFilePath), Files.readString(actualFilePath));
+        }
     }
 
     @Test
-    public void CorrectXmlConvertToJson2() throws Exception {
-        Path fileXml = Files.createFile(tempDir.resolve("cars2.xml"));
-        Path fileJson = Files.createFile(tempDir.resolve("cars2.json"));
+    public void xmlConvertToJson2(@TempDir Path tempDir) throws Exception {
+        final String xmlFilePath = "xml/xmlWith3Object.xml";
+        final String jsonFilePath = "json/jsonWith3Object.json";
 
-        Files.write(fileXml, Collections.singletonList("""
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <cars>
-                    <car>
-                        <brand>Volkswagen</brand>
-                        <model>Tiguan I</model>
-                        <year>2008</year>
-                        <engine>
-                            <amount>1.4</amount>
-                            <power>150</power>
-                            <fuel>Бензин</fuel>
-                        </engine>
-                    </car>
-                    <car>
-                        <brand>Volkswagen</brand>
-                        <model>Tiguan II</model>
-                        <year>2017</year>
-                        <engine>
-                            <amount>2.0</amount>
-                            <power>180</power>
-                            <fuel>Бензин</fuel>
-                        </engine>
-                    </car>
-                    <car>
-                        <brand>LADA</brand>
-                        <model>Granta I</model>
-                        <year>2012</year>
-                        <engine>
-                            <amount>1.6</amount>
-                            <power>87</power>
-                            <fuel>Бензин</fuel>
-                        </engine>
-                    </car>
-                </cars>"""));
+        try (InputStream inputStreamXml = getClass().getClassLoader().getResourceAsStream(xmlFilePath);
+             InputStream inputStreamJson = getClass().getClassLoader().getResourceAsStream(jsonFilePath)) {
 
-        xmlToJson.convert(fileXml.toString(), fileJson.toString());
+            Path inputFilePath = Files.createFile(tempDir.resolve("inputFile.xml"));
+            Path expectedFilePath = Files.createFile(tempDir.resolve("expectedFile.json"));
+            Path actualFilePath = Files.createFile(tempDir.resolve("actualFile.json"));
 
-        assertEquals(
-                """
-                        {\r
-                          "brands" : [ {\r
-                            "brand" : {\r
-                              "name" : "Volkswagen",\r
-                              "cars" : [ {\r
-                                "model" : "Tiguan I",\r
-                                "year" : 2008,\r
-                                "engine" : {\r
-                                  "amount" : 1.4,\r
-                                  "power" : 150,\r
-                                  "fuel" : "Бензин"\r
-                                }\r
-                              }, {\r
-                                "model" : "Tiguan II",\r
-                                "year" : 2017,\r
-                                "engine" : {\r
-                                  "amount" : 2.0,\r
-                                  "power" : 180,\r
-                                  "fuel" : "Бензин"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          }, {\r
-                            "brand" : {\r
-                              "name" : "LADA",\r
-                              "cars" : [ {\r
-                                "model" : "Granta I",\r
-                                "year" : 2012,\r
-                                "engine" : {\r
-                                  "amount" : 1.6,\r
-                                  "power" : 87,\r
-                                  "fuel" : "Бензин"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          } ]\r
-                        }""",
-                Files.readString(fileJson).trim());
+            FileUtils.copyInputStreamToFile(inputStreamXml, inputFilePath.toFile());
+            FileUtils.copyInputStreamToFile(inputStreamJson, expectedFilePath.toFile());
+
+            xmlToJson.convert(inputFilePath.toString(), actualFilePath.toString());
+
+            assertEquals(Files.readString(expectedFilePath), Files.readString(actualFilePath));
+        }
     }
 
     @Test
-    public void XmlWithEmptyObjectConvertToJson() throws Exception {
-        Path fileXml = Files.createFile(tempDir.resolve("cars3.xml"));
-        Path fileJson = Files.createFile(tempDir.resolve("cars3.json"));
+    public void xmlWithEmptyObjectConvertToJson(@TempDir Path tempDir) throws Exception {
+        final String xmlFilePath = "xml/xmlWithEmptyObject.xml";
+        final String jsonFilePath = "json/jsonWithEmptyObject.json";
 
-        Files.write(fileXml, Collections.singletonList("""
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <cars>
-                    <car>
-                    </car>
-                </cars>
-                """));
+        try (InputStream inputStreamXml = getClass().getClassLoader().getResourceAsStream(xmlFilePath);
+             InputStream inputStreamJson = getClass().getClassLoader().getResourceAsStream(jsonFilePath)) {
 
-        xmlToJson.convert(fileXml.toString(), fileJson.toString());
+            Path inputFilePath = Files.createFile(tempDir.resolve("inputFile.xml"));
+            Path expectedFilePath = Files.createFile(tempDir.resolve("expectedFile.json"));
+            Path actualFilePath = Files.createFile(tempDir.resolve("actualFile.json"));
 
-        assertEquals(
-                """
-                        {\r
-                          "brands" : [ {\r
-                            "brand" : {\r
-                              "name" : "undefined",\r
-                              "cars" : [ {\r
-                                "model" : "undefined",\r
-                                "year" : 0,\r
-                                "engine" : {\r
-                                  "amount" : 0.0,\r
-                                  "power" : 0,\r
-                                  "fuel" : "undefined"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          } ]\r
-                        }""",
-                Files.readString(fileJson).trim());
+            FileUtils.copyInputStreamToFile(inputStreamXml, inputFilePath.toFile());
+            FileUtils.copyInputStreamToFile(inputStreamJson, expectedFilePath.toFile());
+
+            xmlToJson.convert(inputFilePath.toString(), actualFilePath.toString());
+
+            assertEquals(Files.readString(expectedFilePath), Files.readString(actualFilePath));
+        }
     }
 
     @Test
-    public void XmlWithEmptyModelTagConvertToJson() throws Exception {
-        Path fileXml = Files.createFile(tempDir.resolve("cars4.xml"));
-        Path fileJson = Files.createFile(tempDir.resolve("cars4.json"));
+    public void xmlWithEmptyModelTagConvertToJson(@TempDir Path tempDir) throws Exception {
+        final String xmlFilePath = "xml/xmlWithEmptyModelTag.xml";
+        final String jsonFilePath = "json/jsonWithEmptyModelTag.json";
 
-        Files.write(fileXml, Collections.singletonList("""
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <cars>
-                    <car>
-                        <brand>Volkswagen</brand>
-                        <model></model>
-                        <year>2008</year>
-                        <engine>
-                            <amount>1.4</amount>
-                            <power>150</power>
-                            <fuel>Бензин</fuel>
-                        </engine>
-                    </car>
-                </cars>
-                """));
+        try (InputStream inputStreamXml = getClass().getClassLoader().getResourceAsStream(xmlFilePath);
+             InputStream inputStreamJson = getClass().getClassLoader().getResourceAsStream(jsonFilePath)) {
 
-        xmlToJson.convert(fileXml.toString(), fileJson.toString());
+            Path inputFilePath = Files.createFile(tempDir.resolve("inputFile.xml"));
+            Path expectedFilePath = Files.createFile(tempDir.resolve("expectedFile.json"));
+            Path actualFilePath = Files.createFile(tempDir.resolve("actualFile.json"));
 
-        assertEquals(
-                """
-                        {\r
-                          "brands" : [ {\r
-                            "brand" : {\r
-                              "name" : "Volkswagen",\r
-                              "cars" : [ {\r
-                                "model" : "undefined",\r
-                                "year" : 2008,\r
-                                "engine" : {\r
-                                  "amount" : 1.4,\r
-                                  "power" : 150,\r
-                                  "fuel" : "Бензин"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          } ]\r
-                        }""",
-                Files.readString(fileJson).trim());
+            FileUtils.copyInputStreamToFile(inputStreamXml, inputFilePath.toFile());
+            FileUtils.copyInputStreamToFile(inputStreamJson, expectedFilePath.toFile());
+
+            xmlToJson.convert(inputFilePath.toString(), actualFilePath.toString());
+
+            assertEquals(Files.readString(expectedFilePath), Files.readString(actualFilePath));
+        }
     }
 
     @Test
-    public void XmlWithEmptyEngineTagConvertToJson() throws Exception {
-        Path fileXml = Files.createFile(tempDir.resolve("cars5.xml"));
-        Path fileJson = Files.createFile(tempDir.resolve("cars5.json"));
+    public void xmlWithEmptyEngineTagConvertToJson(@TempDir Path tempDir) throws Exception {
+        final String xmlFilePath = "xml/xmlWithEmptyEngineTag.xml";
+        final String jsonFilePath = "json/jsonWithEmptyEngineTag.json";
 
-        Files.write(fileXml, Collections.singletonList("""
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <cars>
-                    <car>
-                        <brand>Volkswagen</brand>
-                        <model>Tiguan I</model>
-                        <year>2008</year>
-                    </car>
-                </cars>
-                """));
+        try (InputStream inputStreamXml = getClass().getClassLoader().getResourceAsStream(xmlFilePath);
+             InputStream inputStreamJson = getClass().getClassLoader().getResourceAsStream(jsonFilePath)) {
 
-        xmlToJson.convert(fileXml.toString(), fileJson.toString());
+            Path inputFilePath = Files.createFile(tempDir.resolve("inputFile.xml"));
+            Path expectedFilePath = Files.createFile(tempDir.resolve("expectedFile.json"));
+            Path actualFilePath = Files.createFile(tempDir.resolve("actualFile.json"));
 
-        assertEquals(
-                """
-                        {\r
-                          "brands" : [ {\r
-                            "brand" : {\r
-                              "name" : "Volkswagen",\r
-                              "cars" : [ {\r
-                                "model" : "Tiguan I",\r
-                                "year" : 2008,\r
-                                "engine" : {\r
-                                  "amount" : 0.0,\r
-                                  "power" : 0,\r
-                                  "fuel" : "undefined"\r
-                                }\r
-                              } ]\r
-                            }\r
-                          } ]\r
-                        }""",
-                Files.readString(fileJson).trim());
+            FileUtils.copyInputStreamToFile(inputStreamXml, inputFilePath.toFile());
+            FileUtils.copyInputStreamToFile(inputStreamJson, expectedFilePath.toFile());
+
+            xmlToJson.convert(inputFilePath.toString(), actualFilePath.toString());
+
+            assertEquals(Files.readString(expectedFilePath), Files.readString(actualFilePath));
+        }
     }
 }

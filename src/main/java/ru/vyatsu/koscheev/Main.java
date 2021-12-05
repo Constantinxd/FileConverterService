@@ -20,11 +20,10 @@ public class Main {
 
         in.close();
 
-        if (service.equals("xmlToJson"))
+        if ("xmlToJson".equals(service))
             new XmlToJson().convert(inputDoc, outputDoc);
-        else if (service.equals("jsonToXml"))
+
+        if ("jsonToXml".equals(service))
             new JsonToXml().convert(inputDoc, outputDoc);
-        else
-            System.out.println("Wrong service name");
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cars>
+    <car>
+        <brand>Volkswagen</brand>
+        <model>Tiguan I</model>
+        <year>2008</year>
+        <engine>
+            <amount>1.4</amount>
+            <power>150</power>
+            <fuel>Бензин</fuel>
+        </engine>
+    </car>
+</cars>
